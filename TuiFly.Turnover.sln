@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TuiFly.Turnover.Api", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TuiFly.Turnover.Domain", "src\Domain\TuiFly.Turnover.Domain.csproj", "{3A7DE359-E33F-43A0-8EB3-C3E821DDF143}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TuiFly.Turnover.Application", "src\Application\TuiFly.Turnover.Application.csproj", "{AE849400-D032-44E1-B41E-39C538FDC68E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,9 +28,14 @@ Global
 		{3A7DE359-E33F-43A0-8EB3-C3E821DDF143}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A7DE359-E33F-43A0-8EB3-C3E821DDF143}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A7DE359-E33F-43A0-8EB3-C3E821DDF143}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE849400-D032-44E1-B41E-39C538FDC68E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE849400-D032-44E1-B41E-39C538FDC68E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE849400-D032-44E1-B41E-39C538FDC68E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE849400-D032-44E1-B41E-39C538FDC68E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{65D279E8-58E2-45A8-8275-F2B8C334F6BF} = {90AC4735-C939-4B55-89EC-7C98D4D66F2A}
 		{3A7DE359-E33F-43A0-8EB3-C3E821DDF143} = {90AC4735-C939-4B55-89EC-7C98D4D66F2A}
+		{AE849400-D032-44E1-B41E-39C538FDC68E} = {90AC4735-C939-4B55-89EC-7C98D4D66F2A}
 	EndGlobalSection
 EndGlobal
