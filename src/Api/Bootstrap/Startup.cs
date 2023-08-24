@@ -1,17 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using TuiFly.FlySearchApi.Api.Extensions;
+using TuiFly.Turnover.Api.Common.Middlewares;
+using TuiFly.Turnover.Api.Extensions;
 
-namespace TuiFly.Turnover.Api
+namespace TuiFly.Turnover.Api.Bootstrap
 {
     public class Startup
     {
@@ -26,6 +22,8 @@ namespace TuiFly.Turnover.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddTuiflySwaggerGen();
+            services.AddAppServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,12 +34,12 @@ namespace TuiFly.Turnover.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            app.UseServerErrorHandler();
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
