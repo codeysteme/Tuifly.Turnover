@@ -1,7 +1,4 @@
-﻿using CsvHelper;
-using CsvHelper.Configuration;
-using System.Globalization;
-using TuiFly.Turnover.Domain.Common;
+﻿using TuiFly.Turnover.Domain.Common;
 using TuiFly.Turnover.Domain.Models;
 
 namespace TuiFly.Turnover.Domain.Services
@@ -16,16 +13,16 @@ namespace TuiFly.Turnover.Domain.Services
         public static void Init(string rawPassengerFile)
         {
             // read passenger list from raw file
-            var rawPassengers = ReadRawPassengerFile(rawPassengerFile);
+            //var rawPassengers = ReadRawPassengerFile(rawPassengerFile);
 
-            // Validate all rawPassengers filter and get valid passengers to sell tickets
-            var validRawPassengers = rawPassengers.FilterAndGetValidRawPassengers();
+            //// Validate all rawPassengers filter and get valid passengers to sell tickets
+            //var validRawPassengers = rawPassengers.FilterAndGetValidRawPassengers();
 
-            // Generate passengers list
-            var passengers = validRawPassengers.GenerateValidPassengersList();
+            //// Generate passengers list
+            //var passengers = validRawPassengers.GenerateValidPassengersList();
 
-            // Generate passengers families
-            var families = passengers.GenerateAndValidateFamilies();
+            //// Generate passengers families
+            //var families = passengers.GenerateAndValidateFamilies();
 
         }
 
@@ -68,7 +65,7 @@ namespace TuiFly.Turnover.Domain.Services
 
             static Passenger ToPassenger(RawPassenger rawPassenger)
             {
-                var isOversize = rawPassenger.Places.Equals(Constants.PASSENGER_OVERSIZE_TYPE, StringComparison.Ordinal);
+                var isOversize = rawPassenger.Places.Equals(Constants.TWO_PLACES, StringComparison.Ordinal);
                 var price = isOversize ? Constants.OVERSIZE_PRICE : rawPassenger.Age < 12 ? Constants.ENFANT_PRICE : Constants.ADULTE_PRICE;
 
                 return new Passenger
@@ -80,69 +77,6 @@ namespace TuiFly.Turnover.Domain.Services
                     Price = price
                 };
             }
-        }
-
-        /// <summary>
-        /// Validate all rawPassengers, filter and get valid passengers to sell tickets
-        /// </summary>
-        /// <param name="rawPassengers"></param>
-        public static List<RawPassenger> FilterAndGetValidRawPassengers(this IEnumerable<RawPassenger> rawPassengers)
-        {
-            var validRawPassengers = new List<RawPassenger>();
-            foreach (var passenger in rawPassengers)
-            {
-                //Validate type of passenger ADULT or Child
-                var isNotValidType = passenger.Age < Constants.PASSENGER_CHILD_AGE && !passenger.Type.Equals(PassengerTypeEnum.Enfant);
-                isNotValidType = passenger.Type.Equals(PassengerTypeEnum.Enfant) && passenger.Age < Constants.PASSENGER_CHILD_AGE;
-
-                //Validate child
-                if (passenger.Type.Equals(PassengerTypeEnum.Enfant))
-                {
-                    var isValidChild = passenger.Age < Constants.PASSENGER_CHILD_AGE && !passenger.Famille.Equals(Constants.FAMILY_DEFAULT_NAME)
-                        && rawPassengers.Any(p => p.Type.Equals(PassengerTypeEnum.Adulte) && p.Famille.Equals(passenger.Famille));
-                }
-
-                //Child passenger must have at least one parent : same family with adult and not << - >>
-                var isChildHasNoParent = passenger.Age < Constants.PASSENGER_CHILD_AGE
-                    && (!rawPassengers.Any(p => p.Type.Equals(PassengerTypeEnum.Adulte) && p.Famille.Equals(passenger.Famille))
-                        || passenger.Famille.Equals(Constants.FAMILY_DEFAULT_NAME));
-
-                //Only adult can have two sits
-                var isNotValidOverSize = passenger.Places.Equals(Constants.PASSENGER_OVERSIZE_TYPE, StringComparison.Ordinal)
-                    && !passenger.Type.Equals(PassengerTypeEnum.Adulte);
-
-                if (!isNotValidType && !isChildHasNoParent && !isNotValidOverSize)
-                {
-                    validRawPassengers.Add(passenger);
-                }
-            }
-
-            return validRawPassengers;
-        }
-
-        /// <summary>
-        /// Read passenger file and validate
-        /// </summary>
-        /// <param name="rawPassengerFile"></param>
-        /// <returns></returns>
-        public static IEnumerable<RawPassenger> ReadRawPassengerFile(string rawPassengerFile)
-        {
-            try
-            {
-                using var reader = new StreamReader(rawPassengerFile);
-                using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
-                {
-                    Delimiter = ";"
-                });
-
-                return csv.GetRecords<RawPassenger>().ToList();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-            return Array.Empty<RawPassenger>();
         }
     }
 }
