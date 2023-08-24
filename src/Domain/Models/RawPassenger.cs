@@ -25,11 +25,11 @@ namespace TuiFly.Turnover.Domain.Models
         /// <summary>
         /// Family name
         /// </summary>
-        public string Famille { get; set; }
+        public string Famille { get; set; } = string.Empty;
 
         /// <summary>
         /// Passenger places number : check
         /// </summary>
-        public string Places { get; set; }
+        public string Places { get; set; } = string.Empty;
     }
 }

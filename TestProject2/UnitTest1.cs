@@ -1,7 +1,4 @@
-using System;
-using Xunit;
-
-namespace TuiFly.Turnover.Domain.Tests.Unit
+namespace TestProject2
 {
     public class UnitTest1
     {

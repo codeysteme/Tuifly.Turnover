@@ -1,5 +1,4 @@
-﻿using System;
-using TuiFly.Turnover.Domain.Services;
+﻿using TuiFly.Turnover.Domain.Services;
 
 namespace TuiFly.Turnover.Application
 {

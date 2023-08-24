@@ -1,10 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using TuiFly.Turnover.Domain.Common;
 using TuiFly.Turnover.Domain.Models;
 
@@ -103,7 +99,7 @@ namespace TuiFly.Turnover.Domain.Services
                 if (passenger.Type.Equals(PassengerTypeEnum.Enfant))
                 {
                     var isValidChild = passenger.Age < Constants.PASSENGER_CHILD_AGE && !passenger.Famille.Equals(Constants.FAMILY_DEFAULT_NAME)
-                        && rawPassengers.Any(p => p.Type.Equals(PassengerTypeEnum.Adulte) && p.Famille.Equals(passenger.Famille);
+                        && rawPassengers.Any(p => p.Type.Equals(PassengerTypeEnum.Adulte) && p.Famille.Equals(passenger.Famille));
                 }
 
                 //Child passenger must have at least one parent : same family with adult and not << - >>

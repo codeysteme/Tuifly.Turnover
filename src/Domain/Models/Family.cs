@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace TuiFly.Turnover.Domain.Models
+﻿namespace TuiFly.Turnover.Domain.Models
 {
     /// <summary>
     /// Represent family class
@@ -13,12 +10,12 @@ namespace TuiFly.Turnover.Domain.Models
         /// <summary>
         /// The name for identify a family
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// All family members
         /// </summary>
-        public IEnumerable<Passenger> Members { get; set; }
+        public IEnumerable<Passenger> Members { get; set; } = new List<Passenger>();
 
         #endregion
 

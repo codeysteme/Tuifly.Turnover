@@ -5,15 +5,15 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{476A53EB-3C8B-4A8F-8F92-64E9CD1FCBFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TuiFly.Turnover.Application", "src\Application\TuiFly.Turnover.Application.csproj", "{59055438-12EA-4A79-A885-1A6D15244DB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TuiFly.Turnover.Application", "src\Application\TuiFly.Turnover.Application.csproj", "{59055438-12EA-4A79-A885-1A6D15244DB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TuiFly.Turnover.Domain", "src\Domain\TuiFly.Turnover.Domain.csproj", "{C549288C-D1C5-44E9-8A8A-24BEA3BEC990}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TuiFly.Turnover.Domain", "src\Domain\TuiFly.Turnover.Domain.csproj", "{C549288C-D1C5-44E9-8A8A-24BEA3BEC990}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{33C745C9-5B52-42D0-B9C9-264326E01957}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TuiFly.Turnover.Application.Tests.Unit", "tests\Application\TuiFly.Turnover.Application.Tests.Unit.csproj", "{5CAC9397-0E27-4220-9956-39E3CB8D7619}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TuiFly.Turnover.Application.Tests.Unit", "tests\Application\TuiFly.Turnover.Application.Tests.Unit.csproj", "{5CAC9397-0E27-4220-9956-39E3CB8D7619}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TuiFly.Turnover.Domain.Tests.Unit", "tests\Domain\TuiFly.Turnover.Domain.Tests.Unit.csproj", "{F7D9FE7A-DA1E-4322-AB80-111E3AF14727}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TuiFly.Turnover.Domain.Tests.Unit", "tests\Domain\TuiFly.Turnover.Domain.Tests.Unit.csproj", "{F7D9FE7A-DA1E-4322-AB80-111E3AF14727}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,5 +46,8 @@ Global
 		{C549288C-D1C5-44E9-8A8A-24BEA3BEC990} = {476A53EB-3C8B-4A8F-8F92-64E9CD1FCBFC}
 		{5CAC9397-0E27-4220-9956-39E3CB8D7619} = {33C745C9-5B52-42D0-B9C9-264326E01957}
 		{F7D9FE7A-DA1E-4322-AB80-111E3AF14727} = {33C745C9-5B52-42D0-B9C9-264326E01957}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B8284EA7-A184-420A-A907-E3980B67B2F9}
 	EndGlobalSection
 EndGlobal
