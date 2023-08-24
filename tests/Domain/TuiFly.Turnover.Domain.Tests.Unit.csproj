@@ -28,8 +28,4 @@
 	  <ProjectReference Include="..\..\src\Domain\TuiFly.Turnover.Domain.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Services\" />
-	</ItemGroup>
-
 </Project>
