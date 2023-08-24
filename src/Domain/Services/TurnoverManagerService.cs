@@ -40,19 +40,22 @@ namespace TuiFly.Turnover.Domain.Services
         /// <param name="passengers">A list of passenger</param>
         public static IEnumerable<Family> GenerateAndValidateFamilies(this IEnumerable<Passenger> passengers)
         {
-            var families = passengers.GroupBy(p => p.Family).Select(f => new Family { Name = f.Key, Members = f }).ToList();
-            var familyGroup = families.Where(f => !f.Name.Equals(Constants.FAMILY_DEFAULT_NAME)).ToArray();
+            var passengerGroup = passengers.GroupBy(p => p.Family).Select(f => new Family { Name = f.Key, Members = f }).ToList();
+            var familyGroup = passengerGroup.Where(f => !f.Name.Equals(Constants.FAMILY_DEFAULT_NAME)).ToList();
 
-            for (int i = 0; i < families.Count; i++)
+            var cleanFamilies = new List<Family>();
+
+            foreach (var family in familyGroup)
             {
-                if (families[i].Members.Count(p => p.Type.Equals(PassengerTypeEnum.Adulte)) > Constants.FAMILY_MAX_ADULT
-                     || families[i].Members.Count(p => p.Type.Equals(PassengerTypeEnum.Enfant)) > Constants.FAMILY_MAX_CHILD)
+                var isMaxAdult = family.Members.Count(p => p.Type.Equals(PassengerTypeEnum.Adulte)) <= Constants.FAMILY_MAX_ADULT;
+                var isMaxChild = family.Members.Count(p => p.Type.Equals(PassengerTypeEnum.Enfant)) <= Constants.FAMILY_MAX_CHILD;
+                if (isMaxAdult && isMaxChild)
                 {
-                    //families[i].InvalidateStatus();
+                    cleanFamilies.Add(family);
                 }
             }
 
-            return families.ToList();
+            return cleanFamilies;
         }
 
         /// <summary>
@@ -76,8 +79,8 @@ namespace TuiFly.Turnover.Domain.Services
                 {
                     Age = rawPassenger.Age,
                     Family = rawPassenger.Famille,
-                    OverSize = isOversize,
                     Type = rawPassenger.Type,
+                    OverSize = isOversize,
                     Price = price
                 };
             }
@@ -94,6 +97,14 @@ namespace TuiFly.Turnover.Domain.Services
             {
                 //Validate type of passenger ADULT or Child
                 var isNotValidType = passenger.Age < Constants.PASSENGER_CHILD_AGE && !passenger.Type.Equals(PassengerTypeEnum.Enfant);
+                isNotValidType = passenger.Type.Equals(PassengerTypeEnum.Enfant) && passenger.Age < Constants.PASSENGER_CHILD_AGE;
+
+                //Validate child
+                if (passenger.Type.Equals(PassengerTypeEnum.Enfant))
+                {
+                    var isValidChild = passenger.Age < Constants.PASSENGER_CHILD_AGE && !passenger.Famille.Equals(Constants.FAMILY_DEFAULT_NAME)
+                        && rawPassengers.Any(p => p.Type.Equals(PassengerTypeEnum.Adulte) && p.Famille.Equals(passenger.Famille);
+                }
 
                 //Child passenger must have at least one parent : same family with adult and not << - >>
                 var isChildHasNoParent = passenger.Age < Constants.PASSENGER_CHILD_AGE
