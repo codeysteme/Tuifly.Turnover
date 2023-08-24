@@ -16,13 +16,38 @@
         public const int ENFANT_PRICE = 150;
 
         /// <summary>
-        /// global price for USer more size
+        /// price for oversize passenger
         /// </summary>
-        public const int PASSENGER_OVERSIZE_PRICE = 500;
+        public const int OVERSIZE_PRICE = 500;
 
         /// <summary>
-        /// the passenger type from raw file
+        /// passenger oversize type 
         /// </summary>
-        public const int PASSENGER_TYPE = 500;
+        public const string PASSENGER_OVERSIZE_TYPE = "Oui";
+
+        /// <summary>
+        /// Age to determine child passengers
+        /// </summary>
+        public const int PASSENGER_CHILD_AGE = 12;
+
+        /// <summary>
+        /// for all passengers who has not family : distinct by name : -
+        /// </summary>
+        public const string FAMILY_DEFAULT_NAME = "-";
+
+        /// <summary>
+        /// Max allowed number of Adult in familly
+        /// </summary>
+        public const int FAMILY_MAX_ADULT = 2;
+
+        /// <summary>
+        /// Max allowed number of Child in familly
+        /// </summary>
+        public const int FAMILY_MAX_CHILD = 3;
+
+        /// <summary>
+        /// the maximum number of passengers that can board the plane
+        /// </summary>
+        public const int MAX_PLANE_CAPACITY = 200;
     }
 }
