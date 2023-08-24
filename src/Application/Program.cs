@@ -8,17 +8,7 @@ namespace TuiFly.Turnover.Application
         static void Main(string[] args)
         {
             // Init turnover passenger manager service
-            var turnoverService = new TurnoverManagerService();
-
-            // Generate passenger file by a raw data file
-            turnoverService.init("StaticFiles/passengers.csv");
-
-            if (true)
-                return;
-
-            //var listPassengers = 
-
-            //turnoverManagerService.GeneratePassengersAndFamily();
+            TurnoverManagerService.Init("StaticFiles/passengers.csv");
 
 
             Console.WriteLine("Hello World!");

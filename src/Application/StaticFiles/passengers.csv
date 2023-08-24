@@ -1,7 +1,7 @@
 ID;Type;Age;Famille;Places
 1;Adulte;35;A;Non
 2;Adulte;32;A;Non
-3;Enfant;7;A;Non
+3;Adulte;17;A;Non
 4;Enfant;4;A;Non
 5;Adulte;45;B;Non
 6;Enfant;10;B;Non
@@ -24,7 +24,7 @@ ID;Type;Age;Famille;Places
 23;Adulte;38;-;Non
 24;Adulte;41;J;Non
 25;Enfant;3;J;Non
-26;Enfant;10;J;Non
+26;Enfant;10;-;Non
 27;Adulte;48;K;Non
 28;Enfant;7;K;Non
 29;Enfant;11;K;Non
