@@ -40,7 +40,7 @@ namespace TuiFly.Turnover.Domain.Services
         /// <param name="passengers">A list of passenger</param>
         public static IEnumerable<Family> GenerateAndValidateFamilies(this IEnumerable<Passenger> passengers)
         {
-            var families = passengers.GroupBy(p => p.Family).Select(f => new Family { Name = f.Key, Members = f, Status = true }).ToList();
+            var families = passengers.GroupBy(p => p.Family).Select(f => new Family { Name = f.Key, Members = f }).ToList();
             var familyGroup = families.Where(f => !f.Name.Equals(Constants.FAMILY_DEFAULT_NAME)).ToArray();
 
             for (int i = 0; i < families.Count; i++)
@@ -48,7 +48,7 @@ namespace TuiFly.Turnover.Domain.Services
                 if (families[i].Members.Count(p => p.Type.Equals(PassengerTypeEnum.Adulte)) > Constants.FAMILY_MAX_ADULT
                      || families[i].Members.Count(p => p.Type.Equals(PassengerTypeEnum.Enfant)) > Constants.FAMILY_MAX_CHILD)
                 {
-                    families[i].InvalidateStatus();
+                    //families[i].InvalidateStatus();
                 }
             }
 
@@ -96,7 +96,9 @@ namespace TuiFly.Turnover.Domain.Services
                 var isNotValidType = passenger.Age < Constants.PASSENGER_CHILD_AGE && !passenger.Type.Equals(PassengerTypeEnum.Enfant);
 
                 //Child passenger must have at least one parent : same family with adult and not << - >>
-                var isChildHasNoParent = passenger.Age < Constants.PASSENGER_CHILD_AGE && passenger.Famille.Equals(Constants.FAMILY_DEFAULT_NAME);
+                var isChildHasNoParent = passenger.Age < Constants.PASSENGER_CHILD_AGE
+                    && (!rawPassengers.Any(p => p.Type.Equals(PassengerTypeEnum.Adulte) && p.Famille.Equals(passenger.Famille))
+                        || passenger.Famille.Equals(Constants.FAMILY_DEFAULT_NAME));
 
                 //Only adult can have two sits
                 var isNotValidOverSize = passenger.Places.Equals(Constants.PASSENGER_OVERSIZE_TYPE, StringComparison.Ordinal)

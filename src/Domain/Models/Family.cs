@@ -20,22 +20,9 @@ namespace TuiFly.Turnover.Domain.Models
         /// </summary>
         public IEnumerable<Passenger> Members { get; set; }
 
-        /// <summary>
-        /// Determine if family is valid : respect constraints 
-        /// </summary>
-        public bool Status { get; set; } = true;
-
         #endregion
 
         #region methods
-
-        /// <summary>
-        /// Invalidate status for family witch not respect constraints
-        /// </summary>
-        public void InvalidateStatus()
-        {
-            this.Status = false;
-        }
 
         /// <summary>
         /// Calculate the price of a family ticket

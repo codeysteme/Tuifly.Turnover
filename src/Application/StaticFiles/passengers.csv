@@ -56,6 +56,6 @@ ID;Type;Age;Famille;Places
 55;Enfant;12;Q;Non
 56;Adulte;24;R;Non
 57;Adulte;21;R;Non
-58;Enfant;2;R;Non
+58;Enfant;2;R;Oui
 59;Enfant;4;R;Non
-60;Enfant;6;R;Non
+60;Enfant;6;RO;Non
