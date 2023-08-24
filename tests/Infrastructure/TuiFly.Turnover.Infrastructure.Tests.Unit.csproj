@@ -26,10 +26,13 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\src\Domain\TuiFly.Turnover.Domain.csproj" />
+	  <ProjectReference Include="..\..\src\Infrastructure\TuiFly.Turnover.Infrastructure.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Services\" />
+	  <None Update="Mock\passengers_test.csv">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

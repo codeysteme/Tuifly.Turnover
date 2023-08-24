@@ -3,15 +3,16 @@ using CsvHelper.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
 using TuiFly.Turnover.Domain.Common;
+using TuiFly.Turnover.Domain.Interfaces;
 using TuiFly.Turnover.Domain.Models;
 
-namespace TuiFly.Turnover.Domain.Services
+namespace TuiFly.Turnover.Infrastructure.Services
 {
     /// <summary>
     /// A service for mamange read passengers csv file and Build raw list of 
     /// Potential passengers
     /// </summary>
-    public class RawPassengersService
+    public class RawPassengersService : IRawPassengersService
     {
         private readonly ILogger _logger;
 
@@ -29,6 +30,7 @@ namespace TuiFly.Turnover.Domain.Services
         /// </summary>
         /// <param name="filePath">a simple csv file of raw passengers</param>
         /// <see cref="Turnover.Application.StaticFiles.passengers.csv"/>
+        /// <remarks>filePath must be a vlid csv file</remarks>
         /// <returns></returns>
         public List<RawPassenger> GetRawPassengersList(string filePath) => FilterAndGetRawPassengers(ReadFile(filePath));
 

@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\TuiFly.Turnover.Domain.csproj" />
+    <ProjectReference Include="..\Infrastructure\TuiFly.Turnover.Infrastructure.csproj" />
   </ItemGroup>
 
 	<ItemGroup>

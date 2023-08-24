@@ -3,9 +3,9 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using TuiFly.Turnover.Domain.Common;
 using TuiFly.Turnover.Domain.Models;
-using TuiFly.Turnover.Domain.Services;
+using TuiFly.Turnover.Infrastructure.Services;
 
-namespace TuiFly.Turnover.Domain.Tests.Unit.Services
+namespace TuiFly.Turnover.Infrastructure.Tests.Unit.Services
 {
     public class RawPassengersServiceTests
     {
