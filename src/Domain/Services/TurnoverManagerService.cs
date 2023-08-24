@@ -22,11 +22,11 @@ namespace TuiFly.Turnover.Domain.Services
             // read passenger list from raw file
             var rawPassengers = ReadRawPassengerFile(rawPassengerFile);
 
-            //Check and valiate raw passengers list : will throw exception if an empty list or bad value
-            rawPassengers.ValidateRawPassengers();
+            // Validate all rawPassengers filter and get valid passengers to sell tickets
+            var validRawPassengers = rawPassengers.FilterAndGetValidRawPassengers();
 
             // Generate passengers list
-            var passengers = rawPassengers.GeneratePassengers();
+            var passengers = validRawPassengers.GenerateValidPassengersList();
 
             // Generate passengers families
             var families = passengers.GenerateAndValidateFamilies();
@@ -56,12 +56,15 @@ namespace TuiFly.Turnover.Domain.Services
         }
 
         /// <summary>
-        /// Generate passengers list based on raw passengers list
+        /// Generate valid passengers list : determine price of each pasenger
         /// </summary>
         /// <param name="rawPassengers"></param>
         /// <returns></returns>
-        public static IEnumerable<Passenger> GeneratePassengers(this IEnumerable<RawPassenger> rawPassengers)
+        public static IEnumerable<Passenger> GenerateValidPassengersList(this IEnumerable<RawPassenger> rawPassengers)
         {
+            if (!rawPassengers.Any())
+                return Array.Empty<Passenger>();
+
             return rawPassengers.Select(p => ToPassenger(p)).OrderBy(p => p.Family).ToList();
 
             static Passenger ToPassenger(RawPassenger rawPassenger)
@@ -81,34 +84,31 @@ namespace TuiFly.Turnover.Domain.Services
         }
 
         /// <summary>
-        /// Validate all rawPassengers value will throw an exception if bad value provided
+        /// Validate all rawPassengers, filter and get valid passengers to sell tickets
         /// </summary>
         /// <param name="rawPassengers"></param>
-        /// <exception cref="Exception">When bad value found</exception>
-        public static void ValidateRawPassengers(this IEnumerable<RawPassenger> rawPassengers)
+        public static List<RawPassenger> FilterAndGetValidRawPassengers(this IEnumerable<RawPassenger> rawPassengers)
         {
-            var numberOfPassengers = rawPassengers.Count();
-            if (numberOfPassengers == 0 || numberOfPassengers > Constants.MAX_PLANE_CAPACITY)
+            var validRawPassengers = new List<RawPassenger>();
+            foreach (var passenger in rawPassengers)
             {
-                throw new Exception("Error an empty passenger list provided or over size max plane capacity !");
-            }
+                //Validate type of passenger ADULT or Child
+                var isNotValidType = passenger.Age < Constants.PASSENGER_CHILD_AGE && !passenger.Type.Equals(PassengerTypeEnum.Enfant);
 
-            rawPassengers.ToList().ForEach(p => ValidatePassenger(p));
+                //Child passenger must have at least one parent : same family with adult and not << - >>
+                var isChildHasNoParent = passenger.Age < Constants.PASSENGER_CHILD_AGE && passenger.Famille.Equals(Constants.FAMILY_DEFAULT_NAME);
 
-            static void ValidatePassenger(RawPassenger passenger)
-            {
-                var checkChildType = passenger.Age < Constants.PASSENGER_CHILD_AGE && !passenger.Type.Equals(PassengerTypeEnum.Enfant);
-                var checkAdulteType = passenger.Age > Constants.PASSENGER_CHILD_AGE && !passenger.Type.Equals(PassengerTypeEnum.Adulte);
-                //the child never sits alone !!
-                var checkOversize = passenger.Places.Equals(Constants.PASSENGER_OVERSIZE_TYPE, StringComparison.Ordinal)
+                //Only adult can have two sits
+                var isNotValidOverSize = passenger.Places.Equals(Constants.PASSENGER_OVERSIZE_TYPE, StringComparison.Ordinal)
                     && !passenger.Type.Equals(PassengerTypeEnum.Adulte);
 
-                if (checkChildType || checkAdulteType || checkOversize)
+                if (!isNotValidType && !isChildHasNoParent && !isNotValidOverSize)
                 {
-                    var errorMessage = $"Erreur bad passenger provided with value : {passenger.ID,-5}{passenger.Type,-10}{passenger.Age,-5}{passenger.Famille,-5}{passenger.Places,-5}";
-                    throw new Exception(errorMessage);
+                    validRawPassengers.Add(passenger);
                 }
             }
+
+            return validRawPassengers;
         }
 
         /// <summary>
