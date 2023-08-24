@@ -21,9 +21,14 @@
         public const int OVERSIZE_PRICE = 500;
 
         /// <summary>
-        /// passenger oversize type 
+        /// passenger oversize type : two places
         /// </summary>
-        public const string PASSENGER_OVERSIZE_TYPE = "Oui";
+        public const string TWO_PLACES = "Oui";
+
+        /// <summary>
+        /// passenger one place
+        /// </summary>
+        public const string ONE_PLACE = "Non";
 
         /// <summary>
         /// Age to determine child passengers

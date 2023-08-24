@@ -23,7 +23,7 @@ namespace TuiFly.Turnover.Domain.Models
         /// the family id of passenger
         /// </summary>
         /// <example>A</example>
-        public string Family { get; set; }
+        public string Family { get; set; } = string.Empty;
 
         /// <summary>
         /// passenger flight price
