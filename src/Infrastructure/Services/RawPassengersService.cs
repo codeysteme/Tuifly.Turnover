@@ -20,7 +20,7 @@ namespace TuiFly.Turnover.Infrastructure.Services
         /// the ctor
         /// </summary>
         /// <param name="logger"></param>
-        public RawPassengersService(ILogger logger)
+        public RawPassengersService(ILogger<RawPassengersService> logger)
         {
             _logger = logger;
         }
@@ -79,7 +79,7 @@ namespace TuiFly.Turnover.Infrastructure.Services
                 if (passenger.Type.Equals(PassengerTypeEnum.Enfant))
                 {
                     var isValidChild = passenger.Age < Constants.PASSENGER_CHILD_AGE
-                        && !passenger.Famille.Equals(Constants.FAMILY_DEFAULT_NAME)
+                        && !passenger.Famille.Equals(Constants.SINGLE_PASSENGER)
                         && !passenger.Places.Equals(Constants.TWO_PLACES, StringComparison.Ordinal)
                         && rawPassengers.Any(p => p.Type.Equals(PassengerTypeEnum.Adulte) && p.Famille.Equals(passenger.Famille));
                     if (isValidChild)

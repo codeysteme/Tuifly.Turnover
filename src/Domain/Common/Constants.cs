@@ -38,7 +38,7 @@
         /// <summary>
         /// for all passengers who has not family : distinct by name : -
         /// </summary>
-        public const string FAMILY_DEFAULT_NAME = "-";
+        public const string SINGLE_PASSENGER = "-";
 
         /// <summary>
         /// Max allowed number of Adult in familly
