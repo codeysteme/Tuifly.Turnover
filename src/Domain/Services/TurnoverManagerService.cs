@@ -22,13 +22,13 @@ namespace TuiFly.Turnover.Domain.Services
             Console.WriteLine($"{"",-20}{"   TuiFly Disturb Plane App",-20}\n");
             Console.WriteLine($"{"   Chiffre d'affaires total : ",-20}{turnover} Euro | {"Nombre de passagers :",-5} {passengerTickets.Count()} \n");
             Console.WriteLine("****************************************************************************\n");
-            Console.WriteLine($"{"",-5}{"ID",-5}|{"TYPE",-10}|{"AGE",-10}|{"FAMILLE",-10}|{"PLACES"}\n");
+            Console.WriteLine($"{"",-5}{"ID",-5}|{"TYPE",-10}|{"AGE",-10}|{"FAMILLE",-10}|{"PRIX",-10}|{"PLACES"}\n");
 
             int i = 1;
             foreach (var pt in passengerTickets)
             {
                 var seats = pt.OverSize ? $"{pt.Seats[0],-5} and  {pt.Seats[1],-5}" : $"{pt.Seats[0]}";
-                Console.WriteLine($"{"",-5}{i,-5}|{pt.Type,-10}|{pt.Age,-10}|{pt.Family,-10}|{seats,-10}");
+                Console.WriteLine($"{"",-5}{i,-5}|{pt.Type,-10}|{pt.Age,-10}|{pt.Family,-10}|{pt.Price}{" Euro",-10}|{seats,-10}");
                 i++;
             }
         }
