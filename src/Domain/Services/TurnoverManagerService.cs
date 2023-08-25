@@ -14,9 +14,6 @@ namespace TuiFly.Turnover.Domain.Services
         /// <param name="passengerTickets">a passenger tickets</param>
         public void DisplayDistributePlaneWithTurnover(List<PassengerTicket> passengerTickets)
         {
-            ///ID;Type;Age;Famille;Places
-            //1; Adulte; 35; A; Non
-
             var turnover = passengerTickets.Sum(x => x.Price);
             Console.WriteLine("****************************************************************************\n");
             Console.WriteLine($"{"",-20}{"   TuiFly Disturb Plane App",-20}\n");
@@ -40,26 +37,124 @@ namespace TuiFly.Turnover.Domain.Services
         /// <param name="families">A list of families</param>
         public List<PassengerTicket> DistributePassengersAndFamiliesOnPlane(IEnumerable<Family> families)
         {
-            // filter family : equal where number of children equal parents | none equal | and singles
-            var equalFamilies = families.Where(f => IsEqualFamily(f)).ToList();
-            var notEqualFamilies = families.Where(f => IsNotEqualFamily(f)).ToList();
-            var singlePassengers = families.FirstOrDefault(f => f.Name.Equals(Constants.SINGLE_PASSENGER));
-
             //start dispatch passengers
+            // when adult is equal child : stable family
+
+            var stablePassengers = new List<Passenger>();
+            foreach (var family in families.Where(f => IsEqualFamily(f)).ToList())
+            {
+                var adults = family.Members.Where(p => p.Age > Constants.PASSENGER_CHILD_AGE).ToArray();
+                var childs = family.Members.Where(p => p.Age < Constants.PASSENGER_CHILD_AGE).ToArray();
+
+                for (int i = 0; i < adults.Length; i++)
+                {
+                    stablePassengers.Add(adults[i]);
+                    stablePassengers.Add(childs[i]);
+                }
+            }
+
+            //order not equal in mode parent => child
+            var tempoPassengers = new List<Passenger>();
+            foreach (var family in families.Where(f => IsNotEqualFamily(f)).ToArray())
+            {
+                var adults = family.Members.Where(p => p.Age > Constants.PASSENGER_CHILD_AGE).ToArray();
+                var childs = family.Members.Where(p => p.Age < Constants.PASSENGER_CHILD_AGE).ToArray();
+
+                var maxSize = adults.Length > childs.Length ? adults.Length : childs.Length;
+
+                for (int i = 0; i < maxSize; i++)
+                {
+                    if (adults.Length > i)
+                    {
+                        tempoPassengers.Add(adults[i]);
+                    }
+                    if (childs.Length > i)
+                    {
+                        tempoPassengers.Add(childs[i]);
+                    }
+                }
+            }
+
+            //inject single passengers where two childs is sitting alone
+
+            Family rawSinglePassengers = families.FirstOrDefault(f => f.Name.Equals(Constants.SINGLE_PASSENGER)) ?? new Family();
+            var singlePassengers = rawSinglePassengers.Members.ToArray();
+
+            var tempoNoEqual = tempoPassengers.ToArray();
+            var isDuplicated = true;
+            while (isDuplicated)
+            {
+                isDuplicated = false;
+                for (int i = 0; i < tempoPassengers.Count(); i++)
+                {
+                    if ((i + 1) < tempoPassengers.Count() &&
+                        (tempoNoEqual[i].Age < Constants.PASSENGER_CHILD_AGE && tempoNoEqual[i + 1].Age < Constants.PASSENGER_CHILD_AGE))
+                    {
+                        if (singlePassengers.Length > 0)
+                        {
+                            var adult = singlePassengers[0];
+                            singlePassengers = singlePassengers.Where((e, i) => i != 0).ToArray();
+
+                            var index = tempoPassengers.IndexOf(tempoNoEqual[i + 1]);
+                            tempoPassengers.Insert(index, adult);
+
+                            isDuplicated = true;
+                        }
+                        else
+                        {
+                            isDuplicated = false;
+                        }
+                        break;
+                    }
+                }
+            }
+
+            //check and remove childrens sitting alone
+            var cleanPassengers = tempoPassengers;
+
+            tempoNoEqual = tempoPassengers.ToArray();
+            for (int i = 0; i < tempoNoEqual.Count(); i++)
+            {
+                if ((i + 1) < tempoNoEqual.Count() &&
+                       (tempoNoEqual[i].Age < Constants.PASSENGER_CHILD_AGE && tempoNoEqual[i + 1].Age < Constants.PASSENGER_CHILD_AGE))
+                {
+                    cleanPassengers.RemoveAt(i);
+                    if (cleanPassengers.Count() > (i + 1))
+                    {
+                        cleanPassengers.RemoveAt(i + 1);
+                    }
+                }
+            }
+
+            //Merge and build passenger tickets
             var passengerTickets = new List<PassengerTicket>();
 
+            stablePassengers.ForEach(p => PushPassengerTicket(passengerTickets, p));
+            cleanPassengers.ForEach(p => PushPassengerTicket(passengerTickets, p));
+            singlePassengers.ToList().ForEach(p => PushPassengerTicket(passengerTickets, p));
 
-            foreach (var family in equalFamilies)
+            return passengerTickets;
+        }
+
+        /// <summary>
+        /// Push a passenger
+        /// </summary>
+        /// <param name="passengerTickets"></param>
+        /// <param name="passenger"></param>
+        private static void PushPassengerTicket(List<PassengerTicket> passengerTickets, Passenger passenger)
+        {
+            try
             {
-                foreach (var passenger in family.Members)
+                if (passengerTickets.Count <= Constants.MAX_PLANE_CAPACITY)
                 {
                     var passTicket = Passenger.ToPassengerTicket(passenger);
                     GenerateSeats(passTicket);
                     passengerTickets.Add(passTicket);
                 }
             }
-
-            return passengerTickets;
+            catch (Exception)
+            {
+            }
         }
 
         /// <summary>
@@ -68,14 +163,9 @@ namespace TuiFly.Turnover.Domain.Services
         /// <param name="passengerTicket"></param>
         private static void GenerateSeats(PassengerTicket passengerTicket)
         {
-            if (passengerTicket.OverSize)
-            {
-                passengerTicket.Seats = new string[] { $"P_{IncrementByOne()}", $"P_{IncrementByOne()}" };
-            }
-            else
-            {
-                passengerTicket.Seats = new string[] { $"P_{IncrementByOne()}" };
-            }
+            passengerTicket.Seats = passengerTicket.OverSize
+            ? (new string[] { $"P_{IncrementByOne()}", $"P_{IncrementByOne()}" })
+            : (new string[] { $"P_{IncrementByOne()}" });
         }
 
         public static int IncrementByOne() => IndexSeat++;
@@ -88,7 +178,7 @@ namespace TuiFly.Turnover.Domain.Services
         private static bool IsEqualFamily(Family family)
         {
             return !family.Name.Equals(Constants.SINGLE_PASSENGER)
-                && family.Members.Count(p => p.Type.Equals(PassengerTypeEnum.Adulte)) == family.Members.Count(p => p.Type.Equals(PassengerTypeEnum.Enfant));
+            && family.Members.Count(p => p.Type.Equals(PassengerTypeEnum.Adulte)) == family.Members.Count(p => p.Type.Equals(PassengerTypeEnum.Enfant));
         }
 
         /// <summary>
@@ -99,7 +189,7 @@ namespace TuiFly.Turnover.Domain.Services
         private static bool IsNotEqualFamily(Family family)
         {
             return !family.Name.Equals(Constants.SINGLE_PASSENGER)
-                && family.Members.Count(p => p.Type.Equals(PassengerTypeEnum.Adulte)) != family.Members.Count(p => p.Type.Equals(PassengerTypeEnum.Enfant));
+            && family.Members.Count(p => p.Type.Equals(PassengerTypeEnum.Adulte)) != family.Members.Count(p => p.Type.Equals(PassengerTypeEnum.Enfant));
         }
     }
 }
