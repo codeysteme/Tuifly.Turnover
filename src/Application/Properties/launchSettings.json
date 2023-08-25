@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "TuiFly.Turnover.Application": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
