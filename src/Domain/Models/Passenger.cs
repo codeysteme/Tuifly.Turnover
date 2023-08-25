@@ -7,6 +7,7 @@ namespace TuiFly.Turnover.Domain.Models
     /// </summary>
     public class Passenger
     {
+        #region properties
         /// <summary>
         /// the type of passenger : use for distinct user
         /// </summary>
@@ -36,5 +37,23 @@ namespace TuiFly.Turnover.Domain.Models
         /// </summary>
         /// <example>true</example>
         public bool OverSize { get; set; }
+        #endregion
+
+        /// <summary>
+        /// Build a PassengerTicket
+        /// </summary>
+        /// <param name="passenger"></param>
+        /// <returns></returns>
+        public static PassengerTicket ToPassengerTicket(Passenger passenger)
+        {
+            return new PassengerTicket
+            {
+                Age = passenger.Age,
+                Family = passenger.Family,
+                OverSize = passenger.OverSize,
+                Price = passenger.Price,
+                Type = passenger.Type,
+            };
+        }
     }
 }

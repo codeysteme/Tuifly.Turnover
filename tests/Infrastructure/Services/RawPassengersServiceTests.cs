@@ -3,9 +3,9 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using TuiFly.Turnover.Domain.Common;
 using TuiFly.Turnover.Domain.Models;
-using TuiFly.Turnover.Domain.Services;
+using TuiFly.Turnover.Infrastructure.Services;
 
-namespace TuiFly.Turnover.Domain.Tests.Unit.Services
+namespace TuiFly.Turnover.Infrastructure.Tests.Unit.Services
 {
     public class RawPassengersServiceTests
     {
@@ -102,7 +102,7 @@ namespace TuiFly.Turnover.Domain.Tests.Unit.Services
                     new RawPassenger
                     {
                         Age = 45,
-                        Famille = "-",
+                        Famille = Constants.SINGLE_PASSENGER,
                         Places = Constants.TWO_PLACES,
                         Type = PassengerTypeEnum.Adulte
                     },
@@ -123,7 +123,7 @@ namespace TuiFly.Turnover.Domain.Tests.Unit.Services
                     new RawPassenger
                     {
                         Age = 7,
-                        Famille = "-",
+                        Famille = Constants.SINGLE_PASSENGER,
                         Places = Constants.ONE_PLACE,
                         Type = PassengerTypeEnum.Enfant
                     }
@@ -140,7 +140,7 @@ namespace TuiFly.Turnover.Domain.Tests.Unit.Services
                     new RawPassenger
                     {
                         Age = 45,
-                        Famille = "-",
+                        Famille = Constants.SINGLE_PASSENGER,
                         Places = Constants.TWO_PLACES,
                         Type = PassengerTypeEnum.Adulte
                     },
@@ -232,7 +232,7 @@ namespace TuiFly.Turnover.Domain.Tests.Unit.Services
                     new RawPassenger
                     {
                         Age = 6,
-                        Famille = "-",
+                        Famille = Constants.SINGLE_PASSENGER,
                         Places = Constants.ONE_PLACE,
                         Type = PassengerTypeEnum.Enfant
                     },

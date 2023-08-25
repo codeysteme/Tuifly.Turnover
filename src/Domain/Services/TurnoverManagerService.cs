@@ -1,82 +1,105 @@
 ﻿using TuiFly.Turnover.Domain.Common;
+using TuiFly.Turnover.Domain.Interfaces;
 using TuiFly.Turnover.Domain.Models;
 
 namespace TuiFly.Turnover.Domain.Services
 {
-    public static class TurnoverManagerService
+    public class TurnoverManagerService : ITurnoverManagerService
     {
+        public static int IndexSeat = 1;
+
         /// <summary>
-        /// Generate passengers list by a raw passenger file
+        /// Display a disturb Plane with turnover
         /// </summary>
-        /// <param name="rawPassengerFile">path of static passenger file</param>
-        /// <returns></returns>
-        public static void Init(string rawPassengerFile)
+        /// <param name="passengerTickets">a passenger tickets</param>
+        public void DisplayDistributePlaneWithTurnover(List<PassengerTicket> passengerTickets)
         {
-            // read passenger list from raw file
-            //var rawPassengers = ReadRawPassengerFile(rawPassengerFile);
+            ///ID;Type;Age;Famille;Places
+            //1; Adulte; 35; A; Non
 
-            //// Validate all rawPassengers filter and get valid passengers to sell tickets
-            //var validRawPassengers = rawPassengers.FilterAndGetValidRawPassengers();
+            var turnover = passengerTickets.Sum(x => x.Price);
+            Console.WriteLine("****************************************************************************\n");
+            Console.WriteLine($"{"",-20}{"   TuiFly Disturb Plane App",-20}\n");
+            Console.WriteLine($"{"   Chiffre d'affaires total : ",-20}{turnover} Euro | {"Nombre de passagers :",-5} {passengerTickets.Count()} \n");
+            Console.WriteLine("****************************************************************************\n");
+            Console.WriteLine($"{"",-5}{"ID",-5}|{"TYPE",-10}|{"AGE",-10}|{"FAMILLE",-10}|{"PLACES"}\n");
 
-            //// Generate passengers list
-            //var passengers = validRawPassengers.GenerateValidPassengersList();
-
-            //// Generate passengers families
-            //var families = passengers.GenerateAndValidateFamilies();
-
+            int i = 1;
+            foreach (var pt in passengerTickets)
+            {
+                var seats = pt.OverSize ? $"{pt.Seats[0],-5} and  {pt.Seats[1],-5}" : $"{pt.Seats[0]}";
+                Console.WriteLine($"{"",-5}{i,-5}|{pt.Type,-10}|{pt.Age,-10}|{pt.Family,-10}|{seats,-10}");
+                i++;
+            }
         }
 
         /// <summary>
-        /// Generate families by passenger list with and 
-        /// Check a valid family: respecting the constraints 2 adults && 3 children max
+        /// distribute the passengers and families on the plane 
+        /// We have default family for represents single passengers
         /// </summary>
-        /// <param name="passengers">A list of passenger</param>
-        public static IEnumerable<Family> GenerateAndValidateFamilies(this IEnumerable<Passenger> passengers)
+        /// <param name="families">A list of families</param>
+        public List<PassengerTicket> DistributePassengersAndFamiliesOnPlane(IEnumerable<Family> families)
         {
-            var passengerGroup = passengers.GroupBy(p => p.Family).Select(f => new Family { Name = f.Key, Members = f }).ToList();
-            var familyGroup = passengerGroup.Where(f => !f.Name.Equals(Constants.FAMILY_DEFAULT_NAME)).ToList();
+            // filter family : equal where number of children equal parents | none equal | and singles
+            var equalFamilies = families.Where(f => IsEqualFamily(f)).ToList();
+            var notEqualFamilies = families.Where(f => IsNotEqualFamily(f)).ToList();
+            var singlePassengers = families.FirstOrDefault(f => f.Name.Equals(Constants.SINGLE_PASSENGER));
 
-            var cleanFamilies = new List<Family>();
+            //start dispatch passengers
+            var passengerTickets = new List<PassengerTicket>();
 
-            foreach (var family in familyGroup)
+
+            foreach (var family in equalFamilies)
             {
-                var isMaxAdult = family.Members.Count(p => p.Type.Equals(PassengerTypeEnum.Adulte)) <= Constants.FAMILY_MAX_ADULT;
-                var isMaxChild = family.Members.Count(p => p.Type.Equals(PassengerTypeEnum.Enfant)) <= Constants.FAMILY_MAX_CHILD;
-                if (isMaxAdult && isMaxChild)
+                foreach (var passenger in family.Members)
                 {
-                    cleanFamilies.Add(family);
+                    var passTicket = Passenger.ToPassengerTicket(passenger);
+                    GenerateSeats(passTicket);
+                    passengerTickets.Add(passTicket);
                 }
             }
 
-            return cleanFamilies;
+            return passengerTickets;
         }
 
         /// <summary>
-        /// Generate valid passengers list : determine price of each pasenger
+        /// Generate passenger seats
         /// </summary>
-        /// <param name="rawPassengers"></param>
-        /// <returns></returns>
-        public static IEnumerable<Passenger> GenerateValidPassengersList(this IEnumerable<RawPassenger> rawPassengers)
+        /// <param name="passengerTicket"></param>
+        private static void GenerateSeats(PassengerTicket passengerTicket)
         {
-            if (!rawPassengers.Any())
-                return Array.Empty<Passenger>();
-
-            return rawPassengers.Select(p => ToPassenger(p)).OrderBy(p => p.Family).ToList();
-
-            static Passenger ToPassenger(RawPassenger rawPassenger)
+            if (passengerTicket.OverSize)
             {
-                var isOversize = rawPassenger.Places.Equals(Constants.TWO_PLACES, StringComparison.Ordinal);
-                var price = isOversize ? Constants.OVERSIZE_PRICE : rawPassenger.Age < 12 ? Constants.ENFANT_PRICE : Constants.ADULTE_PRICE;
-
-                return new Passenger
-                {
-                    Age = rawPassenger.Age,
-                    Family = rawPassenger.Famille,
-                    Type = rawPassenger.Type,
-                    OverSize = isOversize,
-                    Price = price
-                };
+                passengerTicket.Seats = new string[] { $"P_{IncrementByOne()}", $"P_{IncrementByOne()}" };
             }
+            else
+            {
+                passengerTicket.Seats = new string[] { $"P_{IncrementByOne()}" };
+            }
+        }
+
+        public static int IncrementByOne() => IndexSeat++;
+
+        /// <summary>
+        /// Get an equal families
+        /// </summary>
+        /// <param name="family"></param>
+        /// <returns></returns>
+        private static bool IsEqualFamily(Family family)
+        {
+            return !family.Name.Equals(Constants.SINGLE_PASSENGER)
+                && family.Members.Count(p => p.Type.Equals(PassengerTypeEnum.Adulte)) == family.Members.Count(p => p.Type.Equals(PassengerTypeEnum.Enfant));
+        }
+
+        /// <summary>
+        /// Get not equal families
+        /// </summary>
+        /// <param name="family"></param>
+        /// <returns></returns>
+        private static bool IsNotEqualFamily(Family family)
+        {
+            return !family.Name.Equals(Constants.SINGLE_PASSENGER)
+                && family.Members.Count(p => p.Type.Equals(PassengerTypeEnum.Adulte)) != family.Members.Count(p => p.Type.Equals(PassengerTypeEnum.Enfant));
         }
     }
 }
