@@ -1,9 +1,10 @@
 ﻿using TuiFly.Turnover.Domain.Common;
+using TuiFly.Turnover.Domain.Interfaces;
 using TuiFly.Turnover.Domain.Models;
 
 namespace TuiFly.Turnover.Domain.Services
 {
-    public static class TurnoverManagerService
+    public class TurnoverManagerService : ITurnoverManagerService
     {
         public static int IndexSeat = 1;
 
@@ -11,7 +12,7 @@ namespace TuiFly.Turnover.Domain.Services
         /// Display a disturb Plane with turnover
         /// </summary>
         /// <param name="passengerTickets">a passenger tickets</param>
-        public static void DisplayDistributePlaneWithTurnover(List<PassengerTicket> passengerTickets)
+        public void DisplayDistributePlaneWithTurnover(List<PassengerTicket> passengerTickets)
         {
             ///ID;Type;Age;Famille;Places
             //1; Adulte; 35; A; Non
@@ -37,7 +38,7 @@ namespace TuiFly.Turnover.Domain.Services
         /// We have default family for represents single passengers
         /// </summary>
         /// <param name="families">A list of families</param>
-        public static List<PassengerTicket> DistributePassengersAndFamiliesOnPlane(IEnumerable<Family> families)
+        public List<PassengerTicket> DistributePassengersAndFamiliesOnPlane(IEnumerable<Family> families)
         {
             // filter family : equal where number of children equal parents | none equal | and singles
             var equalFamilies = families.Where(f => IsEqualFamily(f)).ToList();

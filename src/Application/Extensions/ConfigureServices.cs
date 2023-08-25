@@ -21,6 +21,7 @@ namespace TuiFly.Turnover.Application.Extensions
                 .AddLogging(loginBuilder => loginBuilder.SetMinimumLevel(LogLevel.Debug).AddConsole())
                 .AddSingleton<IRawPassengersService, RawPassengersService>()
                 .AddSingleton<IPassengerManagerService, PassengerManagerService>()
+                .AddSingleton<ITurnoverManagerService, TurnoverManagerService>()
                 .BuildServiceProvider();
 
             serviceProvider
