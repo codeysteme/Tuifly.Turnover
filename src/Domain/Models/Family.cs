@@ -15,7 +15,7 @@
         /// <summary>
         /// All family members
         /// </summary>
-        public IEnumerable<Passenger> Members { get; set; } = new List<Passenger>();
+        public List<Passenger> Members { get; set; } = new List<Passenger>();
 
         #endregion
 

@@ -54,7 +54,7 @@ namespace TuiFly.Turnover.Domain.Tests.Unit.Services
                                 Age = 18,
                                 Family = "A",
                                 Type = PassengerTypeEnum.Adulte,
-                                Price = Constants.ADULTE_PRICE,
+                                Price = Constants.OVERSIZE_PRICE,
                                 OverSize = true,
                             },
                             new Passenger
@@ -97,46 +97,23 @@ namespace TuiFly.Turnover.Domain.Tests.Unit.Services
                 },
                 new List<PassengerTicket>
                 {
-                    //new PassengerTicket
-                    //{
-                    //    Age = 18,
-                    //    Family = "A",
-                    //    Type = PassengerTypeEnum.Adulte,
-                    //    Price = Constants.ADULTE_PRICE,
-                    //    OverSize = true,
-                    //    Seats = new string[] {"P_1","P_2"}
-                    //},
-                    //new PassengerTicket
-                    //{
-                    //    Age = 7,
-                    //    Family = "A",
-                    //    Type = PassengerTypeEnum.Enfant,
-                    //    Price = Constants.ENFANT_PRICE,
-                    //    Seats = new string[] {"P_3"}
-                    //},
-                    //new PassengerTicket
-                    //{
-                    //    Age = 9,
-                    //    Family = "A",
-                    //    Type = PassengerTypeEnum.Enfant,
-                    //    Price = Constants.ENFANT_PRICE,
-                    //    Seats = new string[] {"P_4"}
-                    //},
                     new PassengerTicket
                     {
-                        Age = 12,
-                        Family = "E",
+                        Age = 18,
+                        Family = "A",
                         Type = PassengerTypeEnum.Adulte,
-                        Price = Constants.ADULTE_PRICE,
-                        Seats = new string[] {"P_1"}
+                        Price = Constants.OVERSIZE_PRICE,
+                        OverSize =true,
+                        Seats = new string[] {"P_1", "P_2"}
                     },
                     new PassengerTicket
                     {
-                        Age = 7,
-                        Family = "E",
+                        Age = 9,
+                        Family = "A",
                         Type = PassengerTypeEnum.Enfant,
                         Price = Constants.ENFANT_PRICE,
-                        Seats = new string[] {"P_2"}
+                        OverSize =false,
+                        Seats = new string[] {"P_3"}
                     }
                 }
             }

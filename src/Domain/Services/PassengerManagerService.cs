@@ -45,7 +45,7 @@ namespace TuiFly.Turnover.Domain.Services
         /// <param name="passengers">A list of passenger</param>
         public IEnumerable<Family> BuildFamiliesByPassengers(IEnumerable<Passenger> passengers)
         {
-            var families = passengers.GroupBy(p => p.Family).Select(f => new Family { Name = f.Key, Members = f }).ToList();
+            var families = passengers.GroupBy(p => p.Family).Select(f => new Family { Name = f.Key, Members = f.ToList() }).ToList();
             var notSingleFamilies = families.Where(f => !f.Name.Equals(Constants.SINGLE_PASSENGER)).ToList();
 
             foreach (var family in notSingleFamilies)
